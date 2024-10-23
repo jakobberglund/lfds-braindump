@@ -78,34 +78,3 @@ type UiFooProps = {
   dsLayout: 'full' | 'half';
 }
 ```
-
-#### Reusable and dynamic
-Abstract common props into reusable pieces, this way we can guarantee that both the prop name and the values are consistent across the board
-
-❌ Don't
-```ts
-type UiFooProps = {
-  dsText: string;
-  dsVariant: 'primary' | 'secondary' | 'tertiary';
-}
-
-type UiFooTwoProps = {
-  dsVariant: 'primary' | 'secondary'
-}
-```
-
-✅ Do
-```ts
-type VariantList = 'primary' | 'secondary' | 'tertiary'
-
-type Variant<T extends VariantList = VariantList> = Extract<T, VariantList>
-type VariantProp<T extends VariantList = VariantList> = {
-  dsVariant: Variant<T>
-}
-
-type UiFooProps = {
-  dsText: string;
-} & VariantProp
-
-type UiFooTwoProps = VariantProp<'primary' | 'secondary'>
-```
